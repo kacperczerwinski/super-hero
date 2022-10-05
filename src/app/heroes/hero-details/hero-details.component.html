@@ -1,0 +1,39 @@
+<div class="card" *ngIf="selectedHero">
+  <span class="title-back__button">
+    <h2>{{ selectedHero.name | uppercase }} Details</h2>
+    <button mat-raised-button color="primary" [routerLink]="['/heroes']">
+      Back
+    </button></span
+  >
+  <div class="details-input__margin">
+    <mat-form-field
+      appearance="fill"
+      [ngClass]="isEditing ? '' : 'details-inputs__editing'"
+    >
+      <mat-label>Name</mat-label>
+      <input
+        [readonly]="!isEditing ?? true"
+        matInput
+        [(ngModel)]="selectedHero.name"
+      />
+    </mat-form-field>
+  </div>
+  <div class="buttons-padding edit-remove__button">
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="isEditing ? onSave(selectedHero) : onEdit()"
+    >
+      {{ isEditing ? "Save" : "Edit" }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="onRemove(selectedHero)"
+    >
+      Remove
+    </button>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+.edit-remove__button {
+  margin-top: 15px;
+}
+
+.details-inputs__editing {
+  ::ng-deep {
+    div.mat-form-field-flex {
+      background-color: #dfdfdf;
+      pointer-events: none;
+    }
+  }
+}
+
+.details-input__margin {
+  margin-top: 2rem;
+}
+
+.title-back__button {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 60px;
+}
+
+h2 {
+  word-break: break-all;
+}
