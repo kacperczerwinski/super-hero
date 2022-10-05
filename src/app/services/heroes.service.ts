@@ -24,14 +24,14 @@ export class HeroesService {
 
   edit(selectedHero: Hero): Hero[] {
     this.isEditing = true;
-    return (this.heroes = this.heroes.filter((option: Hero) => {
-      if (option.id === selectedHero.id) {
+    return (this.heroes = this.heroes.filter((hero: Hero) => {
+      if (hero.id === selectedHero.id) {
         return {
           ...this.heroes,
           name: selectedHero.name,
         };
       } else {
-        return option;
+        return hero;
       }
     }));
   }
@@ -40,11 +40,11 @@ export class HeroesService {
     this.heroes = heroes;
   }
 
-  save(_selectedHero: Hero): void {
+  save(selectedHero: Hero): void {
     this.heroes = this.heroes.filter(
-      (hero: Hero) => hero.id !== _selectedHero.id
+      (hero: Hero) => hero.id !== selectedHero.id
     );
-    this.heroes.push(_selectedHero);
+    this.heroes.push(selectedHero);
     this.router.navigate(['heroes']);
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Hero } from '../interfaces/hero.interface';
@@ -15,15 +15,15 @@ export class HeroesComponent implements OnInit, OnDestroy {
   heroes: Hero[];
   getHeroesSubscription: Subscription;
   form = new FormGroup({
-    id: new FormControl(),
-    name: new FormControl(),
+    id: new FormControl(null, Validators.required),
+    name: new FormControl(null, Validators.required),
   });
   isCreatingNewHero = false;
-  invalidField = false;
 
   get myHeroes() {
     return this.heroesService.myHeroes;
   }
+
   get filteredOptions() {
     return this.heroesService.filteredOptions;
   }
@@ -47,24 +47,20 @@ export class HeroesComponent implements OnInit, OnDestroy {
   }
 
   addNew(): void {
-    const hero = {
+    const hero: Hero = {
       id: +this.form.get('id').value,
       name: this.form.get('name').value,
     };
-    if (hero.id === 0 || hero.name === null) {
-      this.invalidField = true;
-      this.form.markAllAsTouched();
-    } else {
+    this.form.markAllAsTouched();
+    if (this.form.valid) {
       this.heroes = [hero, ...this.heroes];
       this.heroesService.loadNewHeroes(this.heroes);
       this.heroesService.filterOptions(this.heroes);
-      this.invalidField = false;
     }
   }
 
   onAddNewClickOrCancel(): void {
     this.isCreatingNewHero = !this.isCreatingNewHero;
-    this.invalidField = false;
     this.form.reset();
   }
 

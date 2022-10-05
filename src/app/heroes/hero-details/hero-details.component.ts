@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { HeroesService } from 'src/app/services/heroes.service';
 import { Hero } from '../../interfaces/hero.interface';
 import { DialogComponent } from '../dialog/dialog.component';
-import { Subscription } from 'rxjs/internal/Subscription';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-hero-details',
@@ -16,9 +16,8 @@ export class HeroDetailsComponent implements OnInit, OnDestroy {
   selectedHero?: Hero;
   selectedHeroId: string;
   heroes: Hero[];
-  selectedHeroIdSubscription: Subscription;
-  dialogSubscription: Subscription;
   isEditing = false;
+  destroyed$: Subject<void> = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -32,8 +31,9 @@ export class HeroDetailsComponent implements OnInit, OnDestroy {
   }
 
   readParamsId(): void {
-    this.selectedHeroIdSubscription = this.route.params
+    this.route.params
       .pipe(
+        takeUntil(this.destroyed$),
         map((params) => {
           this.selectedHeroId = params.id;
         })
@@ -67,15 +67,11 @@ export class HeroDetailsComponent implements OnInit, OnDestroy {
       data: { selectedHero: selectedHero },
     });
 
-    this.dialogSubscription = dialogRef.afterClosed().subscribe();
+    dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe();
   }
 
   ngOnDestroy(): void {
-    if (this.dialogSubscription) {
-      this.dialogSubscription.unsubscribe();
-    }
-    if (this.selectedHeroIdSubscription) {
-      this.selectedHeroIdSubscription.unsubscribe();
-    }
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 }

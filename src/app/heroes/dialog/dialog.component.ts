@@ -10,11 +10,13 @@ import { HeroesService } from 'src/app/services/heroes.service';
 export class DialogComponent implements OnInit {
   id!: number;
   name!: string;
+
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private heroesService: HeroesService
   ) {}
+
   ngOnInit(): void {}
 
   onNoClick(): void {

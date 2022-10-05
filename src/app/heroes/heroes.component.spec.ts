@@ -25,19 +25,19 @@ describe('HeroesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('invalid field should be true if there is no hero information introduced', () => {
+  it('form should be invalid if there is no hero information introduced', () => {
     component.addNew();
-    expect(component.invalidField).toBe(true);
+    expect(component.form.invalid).toBe(true);
   });
 
-  it('invalid field should be false if there is hero information introduced', () => {
+  it('form should be valid if there is hero information introduced', () => {
     component.form.setValue({
       id: '123',
       name: 'SpiderTest',
     });
     component.heroes = [];
     component.addNew();
-    expect(component.invalidField).toBe(false);
+    expect(component.form.valid).toBe(true);
   });
 
   it('retrieveHeores should be called', () => {
